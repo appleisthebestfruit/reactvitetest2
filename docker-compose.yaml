@@ -1,0 +1,39 @@
+
+# Docker Compose configuration remains unchanged
+version: '3.8'
+
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - app-data:/app
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    logging:
+      driver: json-file
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - app-data:/usr/share/nginx/html:ro
+    ports:
+      - "80:80"
+    logging:
+      driver: json-file
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+volumes:
+  jenkins-data:
+  app-data:
+    driver: local
