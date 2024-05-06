@@ -21,10 +21,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    // Check permissions and ownership
+                    sh "ls -ld /app"
+                    sh "id"
+
                     // Copy build to shared volume
                     sh "cp -r dist/* ${APP_DIR}"
                 }
             }
         }
+
     }
 }
